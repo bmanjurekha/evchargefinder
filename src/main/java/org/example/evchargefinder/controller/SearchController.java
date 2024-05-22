@@ -1,12 +1,6 @@
 package org.example.evchargefinder.controller;
 import com.google.gson.Gson;
-import org.example.evchargefinder.model.AuthDetails;
-import org.example.evchargefinder.model.ChargingStations;
-import org.example.evchargefinder.model.Search;
-import org.example.evchargefinder.model.SearchPayload;
-import org.example.evchargefinder.services.AuthService;
-import org.example.evchargefinder.services.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.evchargefinder.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,12 +63,14 @@ public class SearchController {
             cs.address = ason.fromJson(adrs,ChargingStations.Address.class);
             cs.chargingPark = new ChargingStations.ChargingPark();
             cs.chargingPark.connectors = new ArrayList<ChargingStations.Connector>();
-            for(Search.Connector con : rs.chargingPark.connectors) {
-                Gson cson = new Gson();
-                String connect = cson.toJson(con);
-                ChargingStations.Connector c;
-                c = cson.fromJson(connect, ChargingStations.Connector.class);
-                cs.chargingPark.connectors.add(c);
+            if(rs.chargingPark!=null) {
+                for (Search.Connector con : rs.chargingPark.connectors) {
+                    Gson cson = new Gson();
+                    String connect = cson.toJson(con);
+                    ChargingStations.Connector c;
+                    c = cson.fromJson(connect, ChargingStations.Connector.class);
+                    cs.chargingPark.connectors.add(c);
+                }
             }
             Gson pson = new Gson();
             String pos = pson.toJson(rs.position);
@@ -84,5 +80,82 @@ public class SearchController {
         }
         return  chargingStations;
     }
+
+    @GetMapping("/ChargingStation/{id}")
+    public ResponseEntity<ChargingStationDetails.Root> getChargingStationsId(@PathVariable String id) throws IOException {
+
+        ChargingStationDetails.Root result = getChargingStationDetails(id);
+
+        return ResponseEntity.status(200).body(result);
+    }
+
+    public ChargingStationDetails.Root getChargingStationDetails(String chargingStationID) throws IOException {
+
+        String APIKey = "SdH2J8zBZrg0qKSzAC5obuqEVNpeBS7q";
+        String sUrl = "https://api.tomtom.com/search/2/chargingAvailability.json"+
+                "?chargingAvailability="+chargingStationID+"&key=" + APIKey ;
+        okhttp3.OkHttpClient sclient = new okhttp3.OkHttpClient().newBuilder()
+                .build();
+        okhttp3.Request srequest = new okhttp3.Request.Builder()
+                .url(sUrl)
+                .method("GET", null)
+                .build();
+
+        okhttp3.Call scall = sclient.newCall(srequest);
+
+        try (okhttp3.Response sresponse = scall.execute()) {
+            if (sresponse.isSuccessful()) {
+                Gson sson = new Gson();
+                ChargingStationDetails.Root sdata = sson.fromJson(sresponse.body().string(), ChargingStationDetails.Root.class);
+                if (sdata != null) {
+                    return sdata;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+    }
+
+    @GetMapping("/ChargingStationDetails/{id}")
+    public ResponseEntity<ArrayList<ChargingStations>> getChargingStationById(@PathVariable String id) throws IOException {
+
+        Search.Root result = getStationDetailsId(id);
+        ArrayList<ChargingStations> stations = transformChargingStations(result.results);
+        return ResponseEntity.status(200).body(stations);
+    }
+
+    public Search.Root getStationDetailsId(String StationId) throws IOException {
+
+        String APIKey = "SdH2J8zBZrg0qKSzAC5obuqEVNpeBS7q";
+        String sUrl = "https://api.tomtom.com/search/2/place.json?entityId="+StationId+"&key=" + APIKey;
+
+        okhttp3.OkHttpClient sclient = new okhttp3.OkHttpClient().newBuilder()
+                .build();
+        okhttp3.Request srequest = new okhttp3.Request.Builder()
+                .url(sUrl)
+                .method("GET", null)
+                .build();
+
+        okhttp3.Call scall = sclient.newCall(srequest);
+
+        try (okhttp3.Response sresponse = scall.execute()) {
+            if (sresponse.isSuccessful()) {
+                Gson sson = new Gson();
+                Search.Root sdata = sson.fromJson(sresponse.body().string(), Search.Root.class);
+                if (sdata != null) {
+                    return sdata;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+    }
+
 }
 

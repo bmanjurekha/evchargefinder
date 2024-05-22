@@ -14,17 +14,17 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
     @GetMapping("/getToken/{username}/{password}")
-    public ResponseEntity<Boolean> getToken(@PathVariable String username,@PathVariable String password)
+    public ResponseEntity<String> getToken(@PathVariable String username,@PathVariable String password)
     {
         if(authService.authenticate(username,password)) {
             AuthDetails authDetails = new AuthDetails();
             authDetails.setUsername(username);
             authDetails.setPassword(password);
-            return  ResponseEntity.ok(authService.authenticate(username,password));
-            //return ResponseEntity.ok(jwtService.getToken(authDetails));
+            //return  ResponseEntity.ok(authService.authenticate(username,password));
+            return ResponseEntity.ok(jwtService.getToken(authDetails));
         }
         else
-            return ResponseEntity.ok(false);
+            return ResponseEntity.ok("Invalid Username or Password");
     }
     @PostMapping("/register-user/{username}/{password}")
     public ResponseEntity<String> registerUser(@PathVariable String username,@PathVariable String password) {

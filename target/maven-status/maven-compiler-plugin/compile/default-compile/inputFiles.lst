@@ -1,8 +1,11 @@
+C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\controller\SearchController.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\EVChargeFinderApplication.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\controller\AuthController.java
-C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\ChargingStation.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\services\AuthService.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\AuthDetails.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\repository\AuthRepository.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\services\JwtService.java
+C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\ChargingStationDetails.java
+C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\ChargingStations.java
+C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\SearchPayload.java
 C:\JavaDev\PlayGround\EVChargeFinder\EVChargeFinder\src\main\java\org\example\evchargefinder\model\Search.java
